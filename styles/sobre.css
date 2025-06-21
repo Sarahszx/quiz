@@ -9,13 +9,26 @@ body {
 header {
     padding: 10px;
 }
+.cabecalho-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
 
-header h2 {
+.titulo-sobre {
+    font-size: 2em;
+    margin-top: 30px;
+    color: #222;
     text-align: center;
-    font-size: 60px;
-    margin-top: 20px;
-    font-family: Georgia, serif;
-    font-style: normal;
+}
+
+.img-redonda {
+    width: 150px;           
+    height: 150px;    
+    object-fit: cover;       
+    display: block;          
+    margin: 0 auto;  
 }
 
 .btn-voltar {
@@ -37,18 +50,34 @@ main {
     margin-top: 30px;
 }
 
+.sobre-jogo {
+    max-width: 800px; 
+    margin: 0 auto;   
+    padding: 20px;
+    text-align: justify;
+    margin-top: -80px;
+}
+
+
+
+.sobre-jogo p {
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
 .circulos {
     display: flex;
     justify-content: center;
     gap: 50px;
-    flex-wrap: wrap; /* Para ficar responsivo, quebra linha se necessário */
+    flex-wrap: wrap; 
 }
 
 .item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 220px; /* Limita a largura para manter compacto */
+    max-width: 220px; 
 }
 
 .circulo {
@@ -60,16 +89,14 @@ main {
     background-position: center;
     background-repeat: no-repeat;
 
-    transition: transform 0.3s ease; /* suaviza a transformação */
+    transition: transform 0.3s ease; 
 }
 
 .circulo:hover {
-    transform: scale(1.1); /* aumenta 10% ao passar o mouse */
-    cursor: pointer;       /* muda o cursor para indicar interatividade */
+    transform: scale(1.1); 
+    cursor: pointer;       
 }
 
-
-/* Coloque suas imagens aqui */
 .img1 {
     background-image: url('../imagem/jõao.jpg');
 }
