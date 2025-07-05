@@ -1,0 +1,97 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #dbeeff;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.quiz-container {
+  background-color: #fff;
+  width: 320px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-header {
+  background-color: #1b43a0;
+  color: #fff;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.quiz-body {
+  padding: 20px;
+  text-align: center;
+}
+
+.quiz-body h2 {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.opções {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.opção {
+  padding: 12px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.opção:hover {
+  background-color: #f0f8ff;
+}
+
+.correta {
+  color: #4CAF50;
+  font-weight: bold;
+  border-color: #4CAF50;
+}
+
+.selecionada {
+  color: #195fb2;
+  font-weight: bold;
+  border-color: #195fb2;
+}
+
+.errada {
+  color:#F44336;
+  font-weight: bold;
+  border-color: #F44336;
+}
+
+.botão-avançar {
+  background-color:#1b43a0;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.botão-avançar:hover {
+  background-color: #16377e;
+}
