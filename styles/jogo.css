@@ -12,14 +12,31 @@ body {
   align-items: center;
   height: 100vh;
   padding-top: 10px;
+  position: relative;
+}
+
+.cronometro {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 36px;
+  font-weight: bold;
+  color: white;
+  background-color: #1b43a0;
+  padding: 15px 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .quiz-container {
   background-color: #fff;
-  width: 320px;
-  border-radius: 16px;
+  width: 350px;
+  border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .quiz-header {
@@ -97,16 +114,22 @@ body {
   background-color: #16377e;
 }
 
-.botão-voltar {
-  background: none;
-  border: none;
-  font-style: italic;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  color: black;
-  align-self: flex-start;
-  margin-left: 16px;
-  margin-bottom: 10px;
+.voltar-menu {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: #1b43a0;
+  padding: 10px 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.voltar-menu:hover {
+  background-color: #16377e;
+  transform: scale(1.05);
 }
