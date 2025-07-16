@@ -9,7 +9,7 @@
 <body>
 
   <a href="../index.html" class="voltar-menu">
-   &#8592;
+    &#8592;
   </a>
 
   <div class="cronometro">
@@ -21,15 +21,83 @@
       <h1>Pergunta 1 de 10</h1>
     </div>
     <div class="quiz-body">
-      <h2>Quantos lados tem um pentágono?</h2>
-      <div class="opções">
-        <button class="opção correta">Quatro</button>
-        <button class="opção selecionada">Cinco</button>
-        <button class="opção errada">Seis</button>
-        <button class="opção">Sete</button>
+      <h2 id="pergunta"></h2>
+
+      <div class="opções" id="opcoes">
+  <script>
+    const perguntas = [
+      {
+        pergunta: "Qual é a função da tag <title> em um documento HTML?",
+        opcoes: ["Exibir o título no corpo da página", "Definir o título que aparece na aba do navegador", "Adicionar uma legenda a uma imagem", "Criar um cabeçalho visível na pagina"],
+        resposta: "b"
+      },
+      {
+        pergunta: "Como se aplica uma cor de fundo azul a uma página com CSS?",
+        opcoes: ["background-color: red;", "color: blue;", "bgcolor: blue;", "background-color: blue;"],
+        resposta: "d"
+      },
+      {
+        pergunta: "Qual é o operador usado para atribuição de valor em JavaScript?",
+        opcoes: ["=", "==", "===", "=>"],
+        resposta: "a"
+      },
+      {
+        pergunta: "Qual propiedade CSS e usada para criar espaçamento entre elementos (por fora)",
+        opcoes: ["padding", "spacing", "margin", "border"],
+        resposta: "c"
+      },
+      {
+        pergunta: "O que a função Math.floor(5.9) retorna?",
+        opcoes: ["5.9", "6", "5", "Erro"],
+        resposta: "c"
+      },
+      {
+        pergunta: "Qual dessas estruturas é usada para repetir um bloco de código enquanto uma condição for verdadeira?",
+        opcoes: ["for", "if", "switch", "while"],
+        resposta: "d"
+      },
+      {
+        pergunta: "O que diferencia TypeScript do JavaScript?",
+        opcoes: ["TypeScript permite tipagem estática", "TypeScript não funciona em navegadores", "TypeScript é mais rápido", "TypeScript é usado apenas para back-end"],
+        resposta: "a"
+      },
+      {
+        pergunta: "Como centralizar um texto horizontalmente dentro de uma div com CSS?",
+        opcoes: ["text-align: left;", "justify-content: center;", "text-align: center;", "align-items: center;"],
+        resposta: "c"
+      },
+      {
+        pergunta: "Qual a principal vantagem da tipagem estática em TypeScript?",
+        opcoes: ["Facilita a edição de imagens", "Permite que o código rode mais devagar", "Evita muitos erros em tempo de execução ao detectar problemas antes de rodar o programa", "Substitui a necessidade de JavaScript"],
+        resposta: "c"
+      },
+      {
+        pergunta: "Em JavaScript, o que é closure??",
+        opcoes: [" É uma função que lembra do escopo onde foi criada, mesmo após esse escopo ter sido finalizado", "É um erro que ocorre quando uma função não retorna nada", "É uma técnica usada para fechar conexões com o banco de dados", "É o mesmo que uma função recursiva"],
+        resposta: "a"
+      }
+    ];
+
+    const letras = ['a', 'b', 'c', 'd'];
+
+    function carregarPerguntaAleatoria() {
+      const pergunta = perguntas[Math.floor(Math.random() * perguntas.length)];
+      document.getElementById("pergunta").innerText = pergunta.pergunta;
+
+      const opcoesHTML = pergunta.opcoes.map((texto, i) =>
+        '<button class="opção">' + letras[i] + ') ' + texto + '</button>'
+      ).join("");
+
+      document.getElementById("opcoes").innerHTML = opcoesHTML;
+    }
+
+    window.onload = carregarPerguntaAleatoria;
+  </script>
       </div>
+
       <button class="botão-avançar">Próxima</button>
     </div>
   </div>
+
 </body>
 </html>
