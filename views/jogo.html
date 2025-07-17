@@ -8,9 +8,7 @@
 </head>
 <body>
 
-  <a href="../index.html" class="voltar-menu">
-    &#8592;
-  </a>
+  <a href="../index.html" class="voltar-menu">&#8592;</a>
 
   <div class="cronometro">
     ⏱️ <span>00:30</span>
@@ -23,7 +21,12 @@
     <div class="quiz-body">
       <h2 id="pergunta"></h2>
 
-      <div class="opções" id="opcoes">
+      <div class="opções" id="opcoes"></div>
+
+      <button class="botão-avançar" disabled>Próxima</button>
+    </div>
+  </div>
+
   <script>
     const perguntas = [
       {
@@ -42,7 +45,7 @@
         resposta: "a"
       },
       {
-        pergunta: "Qual propiedade CSS e usada para criar espaçamento entre elementos (por fora)?",
+        pergunta: "Qual propiedade CSS e usada para criar espaçamento entre elementos (por fora)",
         opcoes: ["padding", "spacing", "margin", "border"],
         resposta: "c"
       },
@@ -72,7 +75,7 @@
         resposta: "c"
       },
       {
-        pergunta: "Em JavaScript, o que é closure?",
+        pergunta: "Em JavaScript, o que é closure??",
         opcoes: [" É uma função que lembra do escopo onde foi criada, mesmo após esse escopo ter sido finalizado", "É um erro que ocorre quando uma função não retorna nada", "É uma técnica usada para fechar conexões com o banco de dados", "É o mesmo que uma função recursiva"],
         resposta: "a"
       }
@@ -80,24 +83,52 @@
 
     const letras = ['a', 'b', 'c', 'd'];
 
+    let perguntaAtual;
+
+    const opcoesDiv = document.getElementById("opcoes");
+    const perguntaH2 = document.getElementById("pergunta");
+    const botaoAvancar = document.querySelector(".botão-avançar");
+
     function carregarPerguntaAleatoria() {
-      const pergunta = perguntas[Math.floor(Math.random() * perguntas.length)];
-      document.getElementById("pergunta").innerText = pergunta.pergunta;
+      perguntaAtual = perguntas[Math.floor(Math.random() * perguntas.length)];
+      perguntaH2.innerText = perguntaAtual.pergunta;
 
-      const opcoesHTML = pergunta.opcoes.map((texto, i) =>
-        '<button class="opção">' + letras[i] + ') ' + texto + '</button>'
-      ).join("");
+      let opcoesHTML = "";
+      for (let i = 0; i < perguntaAtual.opcoes.length; i++) {
+        opcoesHTML += '<button class="opção" data-letra="' + letras[i] + '">' + letras[i] + ') ' + perguntaAtual.opcoes[i] + '</button>';
+      }
+      opcoesDiv.innerHTML = opcoesHTML;
 
-      document.getElementById("opcoes").innerHTML = opcoesHTML;
+      botaoAvancar.disabled = true;
+
+      const botoes = opcoesDiv.querySelectorAll("button.opção");
+      botoes.forEach(botao => {
+        botao.onclick = () => {
+          if (!botaoAvancar.disabled) return;
+
+          const letraEscolhida = botao.getAttribute("data-letra");
+          if (letraEscolhida === perguntaAtual.resposta) {
+            botao.classList.add("correta");
+          } else {
+            botao.classList.add("errada");
+            botoes.forEach(b => {
+              if (b.getAttribute("data-letra") === perguntaAtual.resposta) {
+                b.classList.add("correta");
+              }
+            });
+          }
+
+          botaoAvancar.disabled = false;
+        };
+      });
     }
+
+    botaoAvancar.onclick = () => {
+      carregarPerguntaAleatoria();
+    };
 
     window.onload = carregarPerguntaAleatoria;
   </script>
-      </div>
-
-      <button class="botão-avançar">Próxima</button>
-    </div>
-  </div>
 
 </body>
 </html>
