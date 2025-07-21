@@ -11,7 +11,7 @@
   <a href="../index.html" class="voltar-menu">&#8592;</a>
 
   <div class="cronometro">
-    ⏱️ <span>00:30</span>
+    ⏱️ <span id="tempo">00:30</span>
   </div>
 
   <div class="quiz-container">
@@ -45,7 +45,7 @@
         resposta: "a"
       },
       {
-        pergunta: "Qual propiedade CSS e usada para criar espaçamento entre elementos (por fora)",
+        pergunta: "Qual propriedade CSS e usada para criar espaçamento entre elementos (por fora)",
         opcoes: ["padding", "spacing", "margin", "border"],
         resposta: "c"
       },
@@ -84,49 +84,83 @@
     const letras = ['a', 'b', 'c', 'd'];
 
     let perguntaAtual;
+    let tempoRestante = 30;
+    let cronometro;
+    let respondeu = false;
 
-    const opcoesDiv = document.getElementById("opcoes");
     const perguntaH2 = document.getElementById("pergunta");
+    const opcoesDiv = document.getElementById("opcoes");
     const botaoAvancar = document.querySelector(".botão-avançar");
+    const tempoSpan = document.getElementById("tempo");
+
+    function atualizarTempo() {
+      tempoSpan.textContent = "00:" + (tempoRestante < 10 ? "0" : "") + tempoRestante;
+    }
+
+    function iniciarCronometro() {
+      clearInterval(cronometro);
+      tempoRestante = 30;
+      atualizarTempo();
+
+      cronometro = setInterval(() => {
+        tempoRestante--;
+        atualizarTempo();
+
+        if (tempoRestante <= 0) {
+          clearInterval(cronometro);
+          if (!respondeu) encerrarTempo();
+        }
+      }, 1000);
+    }
+
+    function encerrarTempo() {
+      const botoes = document.querySelectorAll(".opção");
+      botoes.forEach(btn => btn.disabled = true);
+      mostrarCorreta();
+      botaoAvancar.disabled = false;
+    }
+
+    function mostrarCorreta() {
+      document.querySelectorAll(".opção").forEach(btn => {
+        if (btn.dataset.letra === perguntaAtual.resposta) {
+          btn.classList.add("correta");
+        }
+      });
+    }
 
     function carregarPerguntaAleatoria() {
       perguntaAtual = perguntas[Math.floor(Math.random() * perguntas.length)];
       perguntaH2.innerText = perguntaAtual.pergunta;
-
-      let opcoesHTML = "";
-      for (let i = 0; i < perguntaAtual.opcoes.length; i++) {
-        opcoesHTML += '<button class="opção" data-letra="' + letras[i] + '">' + letras[i] + ') ' + perguntaAtual.opcoes[i] + '</button>';
-      }
-      opcoesDiv.innerHTML = opcoesHTML;
-
       botaoAvancar.disabled = true;
+      respondeu = false;
 
-      const botoes = opcoesDiv.querySelectorAll("button.opção");
-      botoes.forEach(botao => {
+      opcoesDiv.innerHTML = letras.map((letra, i) =>
+        '<button class="opção" data-letra="' + letra + '">' + letra + ') ' + perguntaAtual.opcoes[i] + '</button>'
+      ).join("");
+
+      document.querySelectorAll(".opção").forEach(botao => {
+        botao.disabled = false;
         botao.onclick = () => {
-          if (!botaoAvancar.disabled) return;
+          if (respondeu) return;
 
-          const letraEscolhida = botao.getAttribute("data-letra");
-          if (letraEscolhida === perguntaAtual.resposta) {
+          const letra = botao.dataset.letra;
+          if (letra === perguntaAtual.resposta) {
             botao.classList.add("correta");
           } else {
             botao.classList.add("errada");
-            botoes.forEach(b => {
-              if (b.getAttribute("data-letra") === perguntaAtual.resposta) {
-                b.classList.add("correta");
-              }
-            });
+            mostrarCorreta();
           }
 
-          botaoAvancar.disabled = false;
+          respondeu = true;
+          clearInterval(cronometro);
+          encerrarTempo();
         };
       });
+
+      iniciarCronometro();
     }
 
-    botaoAvancar.onclick = () => {
-      carregarPerguntaAleatoria();
-    };
-
+    botaoAvancar.onclick = carregarPerguntaAleatoria;
     window.onload = carregarPerguntaAleatoria;
   </script>
 
