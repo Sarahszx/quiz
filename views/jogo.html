@@ -87,7 +87,9 @@
     let tempoRestante = 30;
     let cronometro;
     let respondeu = false;
+    let indicePergunta = 0;
 
+    const perguntasEmbaralhadas = [...perguntas].sort(() => Math.random() - 0.5);
     const perguntaH2 = document.getElementById("pergunta");
     const opcoesDiv = document.getElementById("opcoes");
     const botaoAvancar = document.querySelector(".botão-avançar");
@@ -129,8 +131,14 @@
     }
 
     function carregarPerguntaAleatoria() {
-      perguntaAtual = perguntas[Math.floor(Math.random() * perguntas.length)];
+      if (indicePergunta >= 10) {
+        return;
+      }
+
+      perguntaAtual = perguntasEmbaralhadas[indicePergunta];
       perguntaH2.innerText = perguntaAtual.pergunta;
+      document.querySelector(".quiz-header h1").innerText = "Pergunta " + (indicePergunta + 1) + " de 10";
+
       botaoAvancar.disabled = true;
       respondeu = false;
 
@@ -160,7 +168,11 @@
       iniciarCronometro();
     }
 
-    botaoAvancar.onclick = carregarPerguntaAleatoria;
+    botaoAvancar.onclick = () => {
+      indicePergunta++;
+      carregarPerguntaAleatoria();
+    };
+
     window.onload = carregarPerguntaAleatoria;
   </script>
 
