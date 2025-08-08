@@ -75,19 +75,21 @@
         resposta: "c"
       },
       {
-        pergunta: "Em JavaScript, o que é closure??",
-        opcoes: [" É uma função que lembra do escopo onde foi criada, mesmo após esse escopo ter sido finalizado", "É um erro que ocorre quando uma função não retorna nada", "É uma técnica usada para fechar conexões com o banco de dados", "É o mesmo que uma função recursiva"],
+        pergunta: "Em JavaScript, o que é closure?",
+        opcoes: ["É uma função que lembra do escopo onde foi criada, mesmo após esse escopo ter sido finalizado", "É um erro que ocorre quando uma função não retorna nada", "É uma técnica usada para fechar conexões com o banco de dados", "É o mesmo que uma função recursiva"],
         resposta: "a"
       }
     ];
 
     const letras = ['a', 'b', 'c', 'd'];
-
+    const pontuacoes = [1, 1, 1, 2, 2, 2, 2, 2, 3, 3];
+    
     let perguntaAtual;
     let tempoRestante = 30;
     let cronometro;
     let respondeu = false;
     let indicePergunta = 0;
+    let pontuacaoTotal = 0;
 
     const perguntasEmbaralhadas = [...perguntas].sort(() => Math.random() - 0.5);
     const perguntaH2 = document.getElementById("pergunta");
@@ -154,6 +156,7 @@
           const letra = botao.dataset.letra;
           if (letra === perguntaAtual.resposta) {
             botao.classList.add("correta");
+            pontuacaoTotal += pontuacoes[indicePergunta];
           } else {
             botao.classList.add("errada");
             mostrarCorreta();
