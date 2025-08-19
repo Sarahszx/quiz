@@ -5,180 +5,212 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiz de Lógica</title>
   <link rel="stylesheet" href="../styles/jogo.css" />
-   <link rel="icon" href="../imagem/favicon.png"  />
+  <link rel="icon" href="../imagem/favicon.png"  />
 </head>
 <body>
 
   <a href="../index.html" class="voltar-menu">&#8592;</a>
 
-  <div class="cronometro">
+  <div id="login-container">
+    <h2>Informe seu nome e senha</h2>
+    <input type="text" id="nome" placeholder="Nome de usuário">
+    <input type="password" id="senha" placeholder="Senha">
+    <button id="btn-iniciar">Iniciar Quiz</button>
+  </div>
+
+  <div class="cronometro" style="display:none;">
     ⏱️ <span id="tempo">00:30</span>
   </div>
 
-  <div class="quiz-container">
+  <div class="quiz-container" style="display:none;">
     <div class="quiz-header">
       <h1>Pergunta 1 de 10</h1>
     </div>
     <div class="quiz-body">
       <h2 id="pergunta"></h2>
-
       <div class="opções" id="opcoes"></div>
-
       <button class="botão-avançar" disabled>Próxima</button>
     </div>
   </div>
 
-  <script>
-    const perguntas = [
-      {
-        pergunta: "Qual é a função da tag <title> em um documento HTML?",
-        opcoes: ["Exibir o título no corpo da página", "Definir o título que aparece na aba do navegador", "Adicionar uma legenda a uma imagem", "Criar um cabeçalho visível na pagina"],
-        resposta: "b"
-      },
-      {
-        pergunta: "Como se aplica uma cor de fundo azul a uma página com CSS?",
-        opcoes: ["background-color: red;", "color: blue;", "bgcolor: blue;", "background-color: blue;"],
-        resposta: "d"
-      },
-      {
-        pergunta: "Qual é o operador usado para atribuição de valor em JavaScript?",
-        opcoes: ["=", "==", "===", "=>"],
-        resposta: "a"
-      },
-      {
-        pergunta: "Qual propriedade CSS e usada para criar espaçamento entre elementos (por fora)",
-        opcoes: ["padding", "spacing", "margin", "border"],
-        resposta: "c"
-      },
-      {
-        pergunta: "O que a função Math.floor(5.9) retorna?",
-        opcoes: ["5.9", "6", "5", "Erro"],
-        resposta: "c"
-      },
-      {
-        pergunta: "Qual dessas estruturas é usada para repetir um bloco de código enquanto uma condição for verdadeira?",
-        opcoes: ["for", "if", "switch", "while"],
-        resposta: "d"
-      },
-      {
-        pergunta: "O que diferencia TypeScript do JavaScript?",
-        opcoes: ["TypeScript permite tipagem estática", "TypeScript não funciona em navegadores", "TypeScript é mais rápido", "TypeScript é usado apenas para back-end"],
-        resposta: "a"
-      },
-      {
-        pergunta: "Como centralizar um texto horizontalmente dentro de uma div com CSS?",
-        opcoes: ["text-align: left;", "justify-content: center;", "text-align: center;", "align-items: center;"],
-        resposta: "c"
-      },
-      {
-        pergunta: "Qual a principal vantagem da tipagem estática em TypeScript?",
-        opcoes: ["Facilita a edição de imagens", "Permite que o código rode mais devagar", "Evita muitos erros em tempo de execução ao detectar problemas antes de rodar o programa", "Substitui a necessidade de JavaScript"],
-        resposta: "c"
-      },
-      {
-        pergunta: "Em JavaScript, o que é closure?",
-        opcoes: ["É uma função que lembra do escopo onde foi criada, mesmo após esse escopo ter sido finalizado", "É um erro que ocorre quando uma função não retorna nada", "É uma técnica usada para fechar conexões com o banco de dados", "É o mesmo que uma função recursiva"],
-        resposta: "a"
-      }
-    ];
+<script>
+  const loginContainer = document.getElementById("login-container");
+  const quizContainer = document.querySelector(".quiz-container");
+  const cronometroDiv = document.querySelector(".cronometro");
 
-    const letras = ['a', 'b', 'c', 'd'];
-    const pontuacoes = [1, 1, 1, 2, 2, 2, 2, 2, 3, 3];
-    
-    let perguntaAtual;
-    let tempoRestante = 30;
-    let cronometro;
-    let respondeu = false;
-    let indicePergunta = 0;
-    let pontuacaoTotal = 0;
+  function mostrarQuiz() {
+    loginContainer.style.display = "none";
+    quizContainer.style.display = "block";
+    cronometroDiv.style.display = "block";
+    carregarPerguntaAleatoria();
+  }
 
-    const perguntasEmbaralhadas = [...perguntas].sort(() => Math.random() - 0.5);
-    const perguntaH2 = document.getElementById("pergunta");
-    const opcoesDiv = document.getElementById("opcoes");
-    const botaoAvancar = document.querySelector(".botão-avançar");
-    const tempoSpan = document.getElementById("tempo");
+  window.onload = function() {
+    const nome = localStorage.getItem("nomeUsuario");
+    const senha = localStorage.getItem("senhaUsuario");
 
-    function atualizarTempo() {
-      tempoSpan.textContent = "00:" + (tempoRestante < 10 ? "0" : "") + tempoRestante;
+    if (nome && senha) {
+      mostrarQuiz();
     }
+  };
 
-    function iniciarCronometro() {
-      clearInterval(cronometro);
-      tempoRestante = 30;
+  document.getElementById("btn-iniciar").onclick = function() {
+    const nome = document.getElementById("nome").value;
+    const senha = document.getElementById("senha").value;
+    if(nome === "" || senha === "") return;
+
+    localStorage.setItem("nomeUsuario", nome);
+    localStorage.setItem("senhaUsuario", senha);
+
+    mostrarQuiz();
+  };
+
+  const perguntas = [
+    {
+      pergunta: "Qual é a função da tag <title> em um documento HTML?",
+      opcoes: ["Exibir o título no corpo da página", "Definir o título que aparece na aba do navegador", "Adicionar uma legenda a uma imagem", "Criar um cabeçalho visível na pagina"],
+      resposta: "b"
+    },
+    {
+      pergunta: "Como se aplica uma cor de fundo azul a uma página com CSS?",
+      opcoes: ["background-color: red;", "color: blue;", "bgcolor: blue;", "background-color: blue;"],
+      resposta: "d"
+    },
+    {
+      pergunta: "Qual é o operador usado para atribuição de valor em JavaScript?",
+      opcoes: ["=", "==", "===", "=>"],
+      resposta: "a"
+    },
+    {
+      pergunta: "Qual propriedade CSS e usada para criar espaçamento entre elementos (por fora)",
+      opcoes: ["padding", "spacing", "margin", "border"],
+      resposta: "c"
+    },
+    {
+      pergunta: "O que a função Math.floor(5.9) retorna?",
+      opcoes: ["5.9", "6", "5", "Erro"],
+      resposta: "c"
+    },
+    {
+      pergunta: "Qual dessas estruturas é usada para repetir um bloco de código enquanto uma condição for verdadeira?",
+      opcoes: ["for", "if", "switch", "while"],
+      resposta: "d"
+    },
+    {
+      pergunta: "O que diferencia TypeScript do JavaScript?",
+      opcoes: ["TypeScript permite tipagem estática", "TypeScript não funciona em navegadores", "TypeScript é mais rápido", "TypeScript é usado apenas para back-end"],
+      resposta: "a"
+    },
+    {
+      pergunta: "Como centralizar um texto horizontalmente dentro de uma div com CSS?",
+      opcoes: ["text-align: left;", "justify-content: center;", "text-align: center;", "align-items: center;"],
+      resposta: "c"
+    },
+    {
+      pergunta: "Qual a principal vantagem da tipagem estática em TypeScript?",
+      opcoes: ["Facilita a edição de imagens", "Permite que o código rode mais devagar", "Evita muitos erros em tempo de execução ao detectar problemas antes de rodar o programa", "Substitui a necessidade de JavaScript"],
+      resposta: "c"
+    },
+    {
+      pergunta: "Em JavaScript, o que é closure?",
+      opcoes: ["É uma função que lembra do escopo onde foi criada, mesmo após esse escopo ter sido finalizado", "É um erro que ocorre quando uma função não retorna nada", "É uma técnica usada para fechar conexões com o banco de dados", "É o mesmo que uma função recursiva"],
+      resposta: "a"
+    }
+  ];
+
+  const letras = ['a', 'b', 'c', 'd'];
+  const pontuacoes = [1, 1, 1, 2, 2, 2, 2, 2, 3, 3];
+    
+  let perguntaAtual;
+  let tempoRestante = 30;
+  let cronometro;
+  let respondeu = false;
+  let indicePergunta = 0;
+  let pontuacaoTotal = 0;
+
+  const perguntasEmbaralhadas = [...perguntas].sort(() => Math.random() - 0.5);
+  const perguntaH2 = document.getElementById("pergunta");
+  const opcoesDiv = document.getElementById("opcoes");
+  const botaoAvancar = document.querySelector(".botão-avançar");
+  const tempoSpan = document.getElementById("tempo");
+
+  function atualizarTempo() {
+    tempoSpan.textContent = "00:" + (tempoRestante < 10 ? "0" : "") + tempoRestante;
+  }
+
+  function iniciarCronometro() {
+    clearInterval(cronometro);
+    tempoRestante = 30;
+    atualizarTempo();
+
+    cronometro = setInterval(() => {
+      tempoRestante--;
       atualizarTempo();
 
-      cronometro = setInterval(() => {
-        tempoRestante--;
-        atualizarTempo();
-
-        if (tempoRestante <= 0) {
-          clearInterval(cronometro);
-          if (!respondeu) encerrarTempo();
-        }
-      }, 1000);
-    }
-
-    function encerrarTempo() {
-      const botoes = document.querySelectorAll(".opção");
-      botoes.forEach(btn => btn.disabled = true);
-      mostrarCorreta();
-      botaoAvancar.disabled = false;
-    }
-
-    function mostrarCorreta() {
-      document.querySelectorAll(".opção").forEach(btn => {
-        if (btn.dataset.letra === perguntaAtual.resposta) {
-          btn.classList.add("correta");
-        }
-      });
-    }
-
-    function carregarPerguntaAleatoria() {
-      if (indicePergunta >= 10) {
-        return;
+      if (tempoRestante <= 0) {
+        clearInterval(cronometro);
+        if (!respondeu) encerrarTempo();
       }
+    }, 1000);
+  }
 
-      perguntaAtual = perguntasEmbaralhadas[indicePergunta];
-      perguntaH2.innerText = perguntaAtual.pergunta;
-      document.querySelector(".quiz-header h1").innerText = "Pergunta " + (indicePergunta + 1) + " de 10";
+  function encerrarTempo() {
+    const botoes = document.querySelectorAll(".opção");
+    botoes.forEach(btn => btn.disabled = true);
+    mostrarCorreta();
+    botaoAvancar.disabled = false;
+  }
 
-      botaoAvancar.disabled = true;
-      respondeu = false;
+  function mostrarCorreta() {
+    document.querySelectorAll(".opção").forEach(btn => {
+      if (btn.dataset.letra === perguntaAtual.resposta) {
+        btn.classList.add("correta");
+      }
+    });
+  }
 
-      opcoesDiv.innerHTML = letras.map((letra, i) =>
-        '<button class="opção" data-letra="' + letra + '">' + letra + ') ' + perguntaAtual.opcoes[i] + '</button>'
-      ).join("");
+  function carregarPerguntaAleatoria() {
+    if (indicePergunta >= 10) return;
 
-      document.querySelectorAll(".opção").forEach(botao => {
-        botao.disabled = false;
-        botao.onclick = () => {
-          if (respondeu) return;
+    perguntaAtual = perguntasEmbaralhadas[indicePergunta];
+    perguntaH2.innerText = perguntaAtual.pergunta;
+    document.querySelector(".quiz-header h1").innerText = "Pergunta " + (indicePergunta + 1) + " de 10";
 
-          const letra = botao.dataset.letra;
-          if (letra === perguntaAtual.resposta) {
-            botao.classList.add("correta");
-            pontuacaoTotal += pontuacoes[indicePergunta];
-          } else {
-            botao.classList.add("errada");
-            mostrarCorreta();
-          }
+    botaoAvancar.disabled = true;
+    respondeu = false;
 
-          respondeu = true;
-          clearInterval(cronometro);
-          encerrarTempo();
-        };
-      });
+    opcoesDiv.innerHTML = letras.map((letra, i) =>
+      '<button class="opção" data-letra="' + letra + '">' + letra + ') ' + perguntaAtual.opcoes[i] + '</button>'
+    ).join("");
 
-      iniciarCronometro();
-    }
+    document.querySelectorAll(".opção").forEach(botao => {
+      botao.disabled = false;
+      botao.onclick = () => {
+        if (respondeu) return;
 
-    botaoAvancar.onclick = () => {
-      indicePergunta++;
-      carregarPerguntaAleatoria();
-    };
+        const letra = botao.dataset.letra;
+        if (letra === perguntaAtual.resposta) {
+          botao.classList.add("correta");
+          pontuacaoTotal += pontuacoes[indicePergunta];
+        } else {
+          botao.classList.add("errada");
+          mostrarCorreta();
+        }
 
-    window.onload = carregarPerguntaAleatoria;
-  </script>
+        respondeu = true;
+        clearInterval(cronometro);
+        encerrarTempo();
+      };
+    });
+
+    iniciarCronometro();
+  }
+
+  botaoAvancar.onclick = () => {
+    indicePergunta++;
+    carregarPerguntaAleatoria();
+  };
+</script>
 
 </body>
 </html>
