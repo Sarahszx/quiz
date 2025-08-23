@@ -300,19 +300,5 @@ body {
   transform: scale(1.05);
 }
 
-.botao-voltar {
-  display: inline-block;
-  background-color: #1b43a0; 
-  color: white;
-  text-decoration: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  margin-top: 15px;
-}
 
-.botao-voltar:hover {
-  background-color: #16377e;
-  transform: scale(1.05);
-}
+
