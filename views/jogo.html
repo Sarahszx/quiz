@@ -234,7 +234,7 @@
       const btn = document.createElement("button");
       btn.classList.add("opção");
       btn.dataset.letra = letras[i];
-      btn.innerHTML = letras[i] + ") " + perguntaAtual.opcoes[i].toLowerCase();  // Alternativas em minúsculo
+      btn.innerHTML = letras[i] + ") " + perguntaAtual.opcoes[i].toLowerCase();  
       btn.onclick = function() {
         if (respondeu) return;
 
