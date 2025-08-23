@@ -54,6 +54,34 @@
         <span class="resultado">Obteve <strong id="pontos-dificeis">0P</strong></span>
       </div>
     </div>
+
+    <div class="pontuacao-footer">
+      <button id="btn-ranking">Ir para Ranking</button>
+    </div>
+  </div>
+
+  <div class="ranking-container" style="display:none;">
+    <div class="ranking-header">👑 Top 10</div>
+    <div class="ranking-body">
+      <div class="ranking-coluna">
+        <div class="ranking-item">🥇1. Fulano</div>
+        <div class="ranking-item">🥈2. Fulano</div>
+        <div class="ranking-item">🥉3. Fulano</div>
+        <div class="ranking-item">🏅4. Fulano</div>
+        <div class="ranking-item">🏅5. Fulano</div>
+      </div>
+      <div class="ranking-coluna">
+        <div class="ranking-item">🏅6. Fulano</div>
+        <div class="ranking-item">🏅7. Fulano</div>
+        <div class="ranking-item">🏅8. Fulano</div>
+        <div class="ranking-item">🏅9.Fulano</div>
+        <div class="ranking-item">🏅10. Fulano</div>
+      </div>
+    </div>
+
+    <div class="ranking-footer">
+      <a href="../index.html" class="botao-voltar">Voltar ao Menu</a>
+    </div>
   </div>
 
 <script>
@@ -61,6 +89,7 @@
   const quizContainer = document.querySelector(".quiz-container");
   const cronometroDiv = document.querySelector(".cronometro");
   const pontuacaoContainer = document.querySelector(".pontuacao-container");
+  const rankingContainer = document.querySelector(".ranking-container");
 
   const pontosFacil = document.getElementById("pontos-faceis");
   const pontosMedia = document.getElementById("pontos-medias");
@@ -76,25 +105,20 @@
   window.onload = function() {
     const nome = localStorage.getItem("nomeUsuario");
     const senha = localStorage.getItem("senhaUsuario");
-
-    if (nome && senha) {
-      mostrarQuiz();
-    }
+    if (nome && senha) mostrarQuiz();
   };
 
   document.getElementById("btn-iniciar").onclick = function() {
     const nome = document.getElementById("nome").value;
     const senha = document.getElementById("senha").value;
     if(nome === "" || senha === "") return;
-
     localStorage.setItem("nomeUsuario", nome);
     localStorage.setItem("senhaUsuario", senha);
-
     mostrarQuiz();
   };
 
   const perguntas = [
-    {
+{
       pergunta: "Qual é a função da tag <title> em um documento HTML?",
       opcoes: ["Exibir o título no corpo da página", "Definir o título que aparece na aba do navegador", "Adicionar uma legenda a uma imagem", "Criar um cabeçalho visível na pagina"],
       resposta: "b",
@@ -154,7 +178,8 @@
       resposta: "a",
       categoria: "dificil"
     }
-  ];
+
+  ]
 
   const letras = ['a', 'b', 'c', 'd'];
   
@@ -171,9 +196,7 @@
   let pontuacaoMedia = 0;
   let pontuacaoDificil = 0;
 
-  const perguntasEmbaralhadas = [...perguntas].sort(function() {
-    return Math.random() - 0.5;
-  });
+  const perguntasEmbaralhadas = [...perguntas].sort(() => Math.random() - 0.5);
 
   const perguntaH2 = document.getElementById("pergunta");
   const opcoesDiv = document.getElementById("opcoes");
@@ -188,11 +211,9 @@
     clearInterval(cronometro);
     tempoRestante = 30;
     atualizarTempo();
-
     cronometro = setInterval(function() {
       tempoRestante--;
       atualizarTempo();
-
       if (tempoRestante <= 0) {
         clearInterval(cronometro);
         if (!respondeu) encerrarTempo();
@@ -201,47 +222,34 @@
   }
 
   function encerrarTempo() {
-    const botoes = document.querySelectorAll(".opção");
-    for (let i = 0; i < botoes.length; i++) {
-      botoes[i].disabled = true;
-    }
+    document.querySelectorAll(".opção").forEach(btn => btn.disabled = true);
     mostrarCorreta();
     botaoAvancar.disabled = false;
   }
 
   function mostrarCorreta() {
-    const botoes = document.querySelectorAll(".opção");
-    for (let i = 0; i < botoes.length; i++) {
-      if (botoes[i].dataset.letra === perguntaAtual.resposta) {
-        botoes[i].classList.add("correta");
-      }
-    }
+    document.querySelectorAll(".opção").forEach(btn => {
+      if (btn.dataset.letra === perguntaAtual.resposta) btn.classList.add("correta");
+    });
   }
 
   function carregarPerguntaAleatoria() {
     if (indicePergunta >= 10) return;
-
     perguntaAtual = perguntasEmbaralhadas[indicePergunta];
     perguntaH2.innerText = perguntaAtual.pergunta;
     document.querySelector(".quiz-header h1").innerText = "Pergunta " + (indicePergunta + 1) + " de 10";
-
     botaoAvancar.disabled = true;
     respondeu = false;
-
     opcoesDiv.innerHTML = "";
-
     for (let i = 0; i < letras.length; i++) {
       const btn = document.createElement("button");
       btn.classList.add("opção");
       btn.dataset.letra = letras[i];
-      btn.innerHTML = letras[i] + ") " + perguntaAtual.opcoes[i].toLowerCase();  
+      btn.innerHTML = letras[i] + ") " + perguntaAtual.opcoes[i].toLowerCase();
       btn.onclick = function() {
         if (respondeu) return;
-
-        const letra = btn.dataset.letra;
-        if (letra === perguntaAtual.resposta) {
+        if (btn.dataset.letra === perguntaAtual.resposta) {
           btn.classList.add("correta");
-
           if (perguntaAtual.categoria === 'facil') pontuacaoFacil += pontosFacilCategoria;
           if (perguntaAtual.categoria === 'media') pontuacaoMedia += pontosMediaCategoria;
           if (perguntaAtual.categoria === 'dificil') pontuacaoDificil += pontosDificilCategoria;
@@ -249,14 +257,12 @@
           btn.classList.add("errada");
           mostrarCorreta();
         }
-
         respondeu = true;
         clearInterval(cronometro);
         encerrarTempo();
       };
       opcoesDiv.appendChild(btn);
     }
-
     iniciarCronometro();
   }
 
@@ -268,9 +274,16 @@
       pontosMedia.innerText = pontuacaoMedia + "P";
       pontosDificil.innerText = pontuacaoDificil + "P";
       quizContainer.style.display = "none";
+      cronometroDiv.style.display = "none";
     } else {
       carregarPerguntaAleatoria();
     }
+  };
+
+  const btnRanking = document.getElementById("btn-ranking");
+  btnRanking.onclick = function() {
+    pontuacaoContainer.style.display = "none";
+    rankingContainer.style.display = "block";
   };
 </script>
 
