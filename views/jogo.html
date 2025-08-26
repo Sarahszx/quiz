@@ -104,22 +104,18 @@ window.onload = function() {
   if (nome) mostrarQuiz();
 };
 
-// LOGIN SEM SENHA
 document.getElementById("btn-iniciar").onclick = function() {
   let nome = document.getElementById("nome").value.trim().toUpperCase();
   if (nome === "") return alert("Por favor, informe um nome de usuário.");
 
-  // Verifica se já existe no localStorage
   if (localStorage.getItem(nome)) {
     return alert("Nome de usuário já existe! Escolha outro.");
   }
 
-  // Salva o nome e inicia o quiz
   localStorage.setItem("nomeUsuario", nome);
   mostrarQuiz();
 };
 
-// PERGUNTAS
 const perguntas = [
   {
     pergunta: "Qual é a função da tag <title> em um documento HTML?",
