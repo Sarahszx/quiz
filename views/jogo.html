@@ -80,7 +80,7 @@
     </div>
 
 <script>
-  const loginContainer = document.getElementById("login-container");
+ const loginContainer = document.getElementById("login-container");
   const quizContainer = document.querySelector(".quiz-container");
   const cronometroDiv = document.querySelector(".cronometro");
   const pontuacaoContainer = document.querySelector(".pontuacao-container");
@@ -89,6 +89,8 @@
   const pontosFacil = document.getElementById("pontos-faceis");
   const pontosMedia = document.getElementById("pontos-medias");
   const pontosDificil = document.getElementById("pontos-dificeis");
+
+  let nomeUsuario;
 
   function mostrarQuiz() {
     loginContainer.style.display = "none";
@@ -99,16 +101,19 @@
 
   window.onload = function() {
     const nome = localStorage.getItem("nomeUsuario");
-    const senha = localStorage.getItem("senhaUsuario");
-    if (nome && senha) mostrarQuiz();
+    if (nome) mostrarQuiz();
   };
 
   document.getElementById("btn-iniciar").onclick = function() {
-    const nome = document.getElementById("nome").value;
-    const senha = document.getElementById("senha").value;
-    if(nome === "" || senha === "") return;
+    let nome = document.getElementById("nome").value.trim().toUpperCase();
+    if (nome === "") return alert("Por favor, informe um nome de usuário.");
+  
+    if(localStorage.getItem(nome)) {
+      return alert("Nome de usuário já existe! Escolha outro.");
+    }
+
     localStorage.setItem("nomeUsuario", nome);
-    localStorage.setItem("senhaUsuario", senha);
+    nomeUsuario = nome;
     mostrarQuiz();
   };
 
