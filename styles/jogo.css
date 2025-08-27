@@ -30,7 +30,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* QUIZ */
 .quiz-container {
   background-color: #fff;
   width: 350px;
@@ -301,3 +300,19 @@ body {
   background-color: #16377e;
   transform: scale(1.05);
 }
+
+#pontuacao-quiz {
+  position: fixed;
+  top: 10px;       
+  right: 10px;     
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  font-weight: bold;
+  font-size: 14px;
+  z-index: 10;
+}
+
+
+

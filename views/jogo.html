@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8" />.
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz de Lógica</title>
+  <title>Quiz de Lógica</title>21
   <link rel="stylesheet" href="../styles/jogo.css" />
   <link rel="icon" href="../imagem/favicon.png" />
 </head>
@@ -21,7 +21,7 @@
     ⏱️ <span id="tempo">00:30</span>
   </div>
 
-  <div class="quiz-container" style="display:none;">
+  <div class="quiz-container" style="display:none; position: relative;">
     <div class="quiz-header">
       <h1>Pergunta 1 de 10</h1>
     </div>
@@ -36,7 +36,6 @@
     <div class="pontuacao-header">
       <h2>Pontuação</h2>
     </div>
-
     <div class="pontuacao-body">
       <div class="linha">
         <span class="categoria">Fáceis</span>
@@ -53,7 +52,6 @@
         <span class="resultado">Obteve <strong id="pontos-dificeis">0P</strong></span>
       </div>
     </div>
-
     <div class="pontuacao-footer">
       <button id="btn-ranking">Ir para Ranking</button>
     </div>
@@ -61,21 +59,9 @@
 
   <div class="ranking-container" style="display:none;">
     <div class="ranking-header">👑 Top 10</div>
-    <div class="ranking-body">
-      <div class="ranking-coluna">
-        <div class="ranking-item">🥇1. Fulano</div>
-        <div class="ranking-item">🥈2. Fulano</div>
-        <div class="ranking-item">🥉3. Fulano</div>
-        <div class="ranking-item">🏅4. Fulano</div>
-        <div class="ranking-item">🏅5. Fulano</div>
-      </div>
-      <div class="ranking-coluna">
-        <div class="ranking-item">🏅6. Fulano</div>
-        <div class="ranking-item">🏅7. Fulano</div>
-        <div class="ranking-item">🏅8. Fulano</div>
-        <div class="ranking-item">🏅9. Fulano</div>
-        <div class="ranking-item">🏅10. Fulano</div>
-      </div>
+    <div class="ranking-body" id="ranking-body">
+      <div class="ranking-coluna" id="coluna1"></div>
+      <div class="ranking-coluna" id="coluna2"></div>
     </div>
   </div>
 
@@ -90,29 +76,53 @@ const pontosFacil = document.getElementById("pontos-faceis");
 const pontosMedia = document.getElementById("pontos-medias");
 const pontosDificil = document.getElementById("pontos-dificeis");
 
-let nomeUsuario;
+let nomeUsuario, idUsuario;
+
+const pontuacaoQuizDiv = document.createElement("div");
+pontuacaoQuizDiv.id = "pontuacao-quiz";
+quizContainer.appendChild(pontuacaoQuizDiv);
+
+function atualizarPontuacaoVisual() {
+  pontuacaoQuizDiv.innerHTML = 
+    "Fáceis: " + pontosCategorias.facil + "P<br>" +
+    "Médias: " + pontosCategorias.media + "P<br>" +
+    "Difíceis: " + pontosCategorias.dificil + "P";
+}
 
 function mostrarQuiz() {
   loginContainer.style.display = "none";
   quizContainer.style.display = "block";
   cronometroDiv.style.display = "block";
   carregarPerguntaAleatoria();
+  atualizarPontuacaoVisual();
 }
 
 window.onload = function() {
   const nome = localStorage.getItem("nomeUsuario");
-  if (nome) mostrarQuiz();
+  const id = localStorage.getItem("idUsuario");
+  if (nome && id) {
+    nomeUsuario = nome;
+    idUsuario = parseInt(id);
+    mostrarQuiz();
+  }
 };
 
 document.getElementById("btn-iniciar").onclick = function() {
   let nome = document.getElementById("nome").value.trim().toUpperCase();
   if (nome === "") return alert("Por favor, informe um nome de usuário.");
 
-  if (localStorage.getItem(nome)) {
-    return alert("Nome de usuário já existe! Escolha outro.");
+  let ranking = JSON.parse(localStorage.getItem("ranking")) || [];
+  for (let i = 0; i < ranking.length; i++) {
+    if (ranking[i].nome === nome) return alert("Nome de usuário já existe! Escolha outro.");
   }
 
+  let id = Date.now();
   localStorage.setItem("nomeUsuario", nome);
+  localStorage.setItem("idUsuario", id);
+
+  nomeUsuario = nome;
+  idUsuario = id;
+
   mostrarQuiz();
 };
 
@@ -180,52 +190,33 @@ const perguntas = [
 ];
 
 const letras = ['a', 'b', 'c', 'd'];
-const pontosFacilCategoria = 1;
-const pontosMediaCategoria = 2;
-const pontosDificilCategoria = 3;
+let perguntaAtual, tempoRestante = 30, cronometro, respondeu = false, indicePergunta = 0;
+const pontosCategorias = { facil: 0, media: 0, dificil: 0 };
 
-let perguntaAtual;
-let tempoRestante = 30;
-let cronometro;
-let respondeu = false;
-let indicePergunta = 0;
-let pontuacaoFacil = 0;
-let pontuacaoMedia = 0;
-let pontuacaoDificil = 0;
-
-const perguntasEmbaralhadas = [...perguntas].sort(() => Math.random() - 0.5);
-
+const perguntasEmbaralhadas = [...perguntas].sort(function() { return Math.random() - 0.5; });
 const perguntaH2 = document.getElementById("pergunta");
 const opcoesDiv = document.getElementById("opcoes");
 const botaoAvancar = document.querySelector(".botão-avançar");
 const tempoSpan = document.getElementById("tempo");
 
-function atualizarTempo() {
-  tempoSpan.textContent = "00:" + (tempoRestante < 10 ? "0" : "") + tempoRestante;
-}
+function atualizarTempo() { tempoSpan.textContent = "00:" + (tempoRestante < 10 ? "0" : "") + tempoRestante; }
 
 function iniciarCronometro() {
-  clearInterval(cronometro);
-  tempoRestante = 30;
-  atualizarTempo();
+  clearInterval(cronometro); tempoRestante = 30; atualizarTempo();
   cronometro = setInterval(function() {
-    tempoRestante--;
-    atualizarTempo();
-    if (tempoRestante <= 0) {
-      clearInterval(cronometro);
-      if (!respondeu) encerrarTempo();
-    }
+    tempoRestante--; atualizarTempo();
+    if (tempoRestante <= 0) { clearInterval(cronometro); if (!respondeu) encerrarTempo(); }
   }, 1000);
 }
 
 function encerrarTempo() {
-  document.querySelectorAll(".opção").forEach(btn => btn.disabled = true);
+  document.querySelectorAll(".opção").forEach(function(btn) { btn.disabled = true; });
   mostrarCorreta();
   botaoAvancar.disabled = false;
 }
 
 function mostrarCorreta() {
-  document.querySelectorAll(".opção").forEach(btn => {
+  document.querySelectorAll(".opção").forEach(function(btn) {
     if (btn.dataset.letra === perguntaAtual.resposta) btn.classList.add("correta");
   });
 }
@@ -235,27 +226,23 @@ function carregarPerguntaAleatoria() {
   perguntaAtual = perguntasEmbaralhadas[indicePergunta];
   perguntaH2.innerText = perguntaAtual.pergunta;
   document.querySelector(".quiz-header h1").innerText = "Pergunta " + (indicePergunta + 1) + " de 10";
-  botaoAvancar.disabled = true;
-  respondeu = false;
-  opcoesDiv.innerHTML = "";
+  botaoAvancar.disabled = true; respondeu = false; opcoesDiv.innerHTML = "";
   for (let i = 0; i < letras.length; i++) {
     const btn = document.createElement("button");
-    btn.classList.add("opção");
-    btn.dataset.letra = letras[i];
+    btn.classList.add("opção"); btn.dataset.letra = letras[i];
     btn.innerHTML = letras[i] + ") " + perguntaAtual.opcoes[i].toLowerCase();
     btn.onclick = function() {
       if (respondeu) return;
       if (btn.dataset.letra === perguntaAtual.resposta) {
         btn.classList.add("correta");
-        if (perguntaAtual.categoria === 'facil') pontuacaoFacil += pontosFacilCategoria;
-        if (perguntaAtual.categoria === 'media') pontuacaoMedia += pontosMediaCategoria;
-        if (perguntaAtual.categoria === 'dificil') pontuacaoDificil += pontosDificilCategoria;
-      } else {
-        btn.classList.add("errada");
-        mostrarCorreta();
+        pontosCategorias[perguntaAtual.categoria] += tempoRestante;
+        atualizarPontuacaoVisual();
+      } else { 
+        btn.classList.add("errada"); 
+        mostrarCorreta(); 
       }
-      respondeu = true;
-      clearInterval(cronometro);
+      respondeu = true; 
+      clearInterval(cronometro); 
       encerrarTempo();
     };
     opcoesDiv.appendChild(btn);
@@ -267,20 +254,48 @@ botaoAvancar.onclick = function() {
   indicePergunta++;
   if (indicePergunta === 10) {
     pontuacaoContainer.style.display = "block";
-    pontosFacil.innerText = pontuacaoFacil + "P";
-    pontosMedia.innerText = pontuacaoMedia + "P";
-    pontosDificil.innerText = pontuacaoDificil + "P";
+    pontosFacil.innerText = pontosCategorias.facil + "P";
+    pontosMedia.innerText = pontosCategorias.media + "P";
+    pontosDificil.innerText = pontosCategorias.dificil + "P";
     quizContainer.style.display = "none";
     cronometroDiv.style.display = "none";
-  } else {
-    carregarPerguntaAleatoria();
-  }
+
+    let ranking = JSON.parse(localStorage.getItem("ranking")) || [];
+    let totalPontos = pontosCategorias.facil + pontosCategorias.media + pontosCategorias.dificil;
+
+    ranking = ranking.filter(function(j) { return j.nome !== nomeUsuario; });
+    ranking.push({ id: idUsuario, nome: nomeUsuario, pontos: totalPontos });
+
+    localStorage.setItem("ranking", JSON.stringify(ranking));
+
+  } else { carregarPerguntaAleatoria(); }
 };
 
-const btnRanking = document.getElementById("btn-ranking");
+var btnRanking = document.getElementById("btn-ranking");
 btnRanking.onclick = function() {
   pontuacaoContainer.style.display = "none";
   rankingContainer.style.display = "block";
+
+  let ranking = JSON.parse(localStorage.getItem("ranking")) || [];
+  ranking.sort(function(a,b){ return b.pontos - a.pontos; });
+  let top10 = ranking.slice(0,10);
+
+  let coluna1 = document.getElementById("coluna1");
+  let coluna2 = document.getElementById("coluna2");
+  coluna1.innerHTML = ""; coluna2.innerHTML = "";
+
+  top10.forEach(function(jogador, index) {
+    let div = document.createElement("div");
+    div.classList.add("ranking-item");
+    let medalha = "";
+    if (index === 0) medalha = "🥇";
+    else if (index === 1) medalha = "🥈";
+    else if (index === 2) medalha = "🥉";
+    else medalha = "🏅";
+    div.textContent = medalha + (index+1) + ". " + jogador.nome + " - " + jogador.pontos + "P";
+    if (index < 5) coluna1.appendChild(div);
+    else coluna2.appendChild(div);
+  });
 };
 </script>
 
