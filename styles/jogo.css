@@ -233,12 +233,13 @@ body {
   border-top: 1px solid #ddd;
   margin: 6px 0;
 }
-
 .pontuacao-footer {
-  margin-top: 10px; 
   display: flex;
   justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
+
 
 .ranking-container {
   width: 320px;
