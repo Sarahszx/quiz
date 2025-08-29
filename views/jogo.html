@@ -128,62 +128,62 @@ document.getElementById("btn-iniciar").onclick = function() {
 
 const perguntas = [
   {
-    pergunta: "Qual é a função da tag <title> em um documento HTML?",
-    opcoes: ["Exibir o título no corpo da página", "Definir o título que aparece na aba do navegador", "Adicionar uma legenda a uma imagem", "Criar um cabeçalho visível na pagina"],
+    pergunta: "Qual destes é um periférico usado para digitar textos no computador?",
+    opcoes: ["Mouse", "Teclado", "Monitor", "Impressora"],
     resposta: "b",
     categoria: "facil"
   },
   {
-    pergunta: "Como se aplica uma cor de fundo azul a uma página com CSS?",
-    opcoes: ["background-color: red;", "color: blue;", "bgcolor: blue;", "background-color: blue;"],
+    pergunta: "Qual das opções abaixo representa uma ameaça virtual comum?",
+    opcoes: ["Impressora", "Planilha do Excel", "Mouse sem fio", "Vírus de computador"],
     resposta: "d",
     categoria: "facil"
   },
   {
-    pergunta: "Qual é o operador usado para atribuição de valor em JavaScript?",
-    opcoes: ["=", "==", "===", "=>"],
+    pergunta: "Qual destes é um navegador de internet?",
+    opcoes: ["Google Chromes", "PowerPoint", "Excel", "Word"],
     resposta: "a",
     categoria: "facil"
   },
   {
-    pergunta: "Qual propriedade CSS é usada para criar espaçamento entre elementos (por fora)?",
-    opcoes: ["padding", "spacing", "margin", "border"],
+    pergunta: "O que significa a sigla USB, muito usada em pen drives?",
+    opcoes: ["Unified Software Box", "User System Base", "Universal Serial Bus", "Ultra Storage Backup"],
     resposta: "c",
     categoria: "media"
   },
   {
-    pergunta: "O que a função Math.floor(5.9) retorna?",
-    opcoes: ["5.9", "6", "5", "Erro"],
+    pergunta: "Onde ficam armazenados os programas e arquivos de forma permanente?",
+    opcoes: ["Memória RAM", "Processador", "HD ou SSD", "Placa de vídeo"],
     resposta: "c",
     categoria: "media"
   },
   {
-    pergunta: "Qual dessas estruturas é usada para repetir um bloco de código enquanto uma condição for verdadeira?",
-    opcoes: ["for", "if", "switch", "while"],
+    pergunta: "Qual linguagem é usada para estruturar páginas da web?",
+    opcoes: ["Python", "Java", "C++", "HTML"],
     resposta: "d",
     categoria: "media"
   },
   {
-    pergunta: "O que diferencia TypeScript do JavaScript?",
-    opcoes: ["TypeScript permite tipagem estática", "TypeScript não funciona em navegadores", "TypeScript é mais rápido", "TypeScript é usado apenas para back-end"],
+    pergunta: "Qual destes sistemas operacionais é desenvolvido pela Microsoft?",
+    opcoes: ["Windows", "Android", "iOS", "Linux"],
     resposta: "a",
     categoria: "media"
   },
   {
-    pergunta: "Como centralizar um texto horizontalmente dentro de uma div com CSS?",
-    opcoes: ["text-align: left;", "justify-content: center;", "text-align: center;", "align-items: center;"],
+    pergunta: "Qual software é usado principalmente para edição de planilhas?",
+    opcoes: ["Word", "PowerPoint", "Excel", "Photoshop"],
     resposta: "c",
     categoria: "media"
   },
   {
-    pergunta: "Qual a principal vantagem da tipagem estática em TypeScript?",
-    opcoes: ["Facilita a edição de imagens", "Permite que o código rode mais devagar", "Evita muitos erros em tempo de execução ao detectar problemas antes de rodar o programa", "Substitui a necessidade de JavaScript"],
+    pergunta: "O que é firewall em segurança da informação?",
+    opcoes: ["Um tipo de cabo de rede", "Um programa de edição de fotos", "Um recurso que bloqueia acessos não autorizados", "Um antivírus portátil"],
     resposta: "c",
     categoria: "dificil"
   },
   {
-    pergunta: "Em JavaScript, o que é closure?",
-    opcoes: ["É uma função que lembra do escopo onde foi criada, mesmo após esse escopo ter sido finalizado", "É um erro que ocorre quando uma função não retorna nada", "É uma técnica usada para fechar conexões com o banco de dados", "É o mesmo que uma função recursiva"],
+    pergunta: "Na computação em nuvem, o que significa IaaS?",
+    opcoes: ["Infrastructure as a Service", "Information as a Security", "Interface and Application System", "Internet as a Service"],
     resposta: "a",
     categoria: "dificil"
   }
@@ -226,11 +226,14 @@ function carregarPerguntaAleatoria() {
   perguntaAtual = perguntasEmbaralhadas[indicePergunta];
   perguntaH2.innerText = perguntaAtual.pergunta;
   document.querySelector(".quiz-header h1").innerText = "Pergunta " + (indicePergunta + 1) + " de 10";
-  botaoAvancar.disabled = true; respondeu = false; opcoesDiv.innerHTML = "";
+  botaoAvancar.disabled = true;
+  respondeu = false;
+  opcoesDiv.innerHTML = "";
   for (let i = 0; i < letras.length; i++) {
     const btn = document.createElement("button");
-    btn.classList.add("opção"); btn.dataset.letra = letras[i];
-    btn.innerHTML = letras[i] + ") " + perguntaAtual.opcoes[i].toLowerCase();
+    btn.classList.add("opção");
+    btn.dataset.letra = letras[i];
+    btn.innerHTML = letras[i] + ") " + perguntaAtual.opcoes[i]; 
     btn.onclick = function() {
       if (respondeu) return;
       if (btn.dataset.letra === perguntaAtual.resposta) {
@@ -247,6 +250,7 @@ function carregarPerguntaAleatoria() {
     };
     opcoesDiv.appendChild(btn);
   }
+
   iniciarCronometro();
 }
 
